@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="orientacion_vocacional.css">
+    <script src="orientacion_vocacional.js"></script>
+
+    <title>Sistema de Orientación Vocacional - Programas Técnicos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="app-header">
+            <span class="badge-institution">Orientación Vocacional Institucional</span>
+            <h1>Descubre tu Perfil Técnico</h1>
+            <p>Evaluación de aptitudes y preferencias educativas para la elección de programa técnico</p>
+        </header>
+
+        <main class="app-body">
+            <!-- Pantalla 1: Bienvenida e Registro -->
+            <section id="screen-welcome" class="screen active">
+                <div class="welcome-card">
+                    <h2 style="font-size: 1.4rem; margin-bottom: 12px; color: var(--slate-800);">¡Bienvenido(a) a la
+                        prueba vocacional!</h2>
+                    <p style="color: var(--slate-600); font-size: 0.95rem; margin-bottom: 20px;">
+                        Este cuestionario consta de <strong>12 preguntas situacionales</strong> diseñadas para
+                        identificar tus fortalezas e intereses naturales entre nuestros 4 programas técnicos
+                        articulados.
+                    </p>
+
+                    <div class="program-pills">
+                        <span class="pill">Sistemas Teleinformáticos</span>
+                        <span class="pill">Programación de Software</span>
+                        <span class="pill">Asistencia Administrativa</span>
+                        <span class="pill">Integración Logística</span>
+                    </div>
+
+                    <form id="form-student" onsubmit="event.preventDefault(); startQuiz();">
+                        <div class="form-group">
+                            <label for="student-name">Nombre completo del estudiante *</label>
+                            <input type="text" id="student-name" class="form-control"
+                                placeholder="Ej. María Fernanda Gómez" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-grade">Grado / Grupo *</label>
+                            <input type="text" id="student-grade" class="form-control" placeholder="Ej. 10°A / 11°2"
+                                required>
+                        </div>
+                        <button type="submit" class="btn" style="margin-top: 10px;">
+                            Comenzar Test Vocacional
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path d="M5 12h14M12 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Pantalla 2: Cuestionario -->
+            <section id="screen-quiz" class="screen">
+                <div class="progress-header">
+                    <span id="question-number-text">Pregunta 1 de 12</span>
+                    <span id="progress-percent-text">8% completado</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                </div>
+
+                <div id="question-container">
+                    <h2 id="question-text" class="question-title">Cargando pregunta...</h2>
+                    <div id="options-container" class="options-grid">
+                        <!-- Las opciones se generan dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    <button type="button" id="btn-prev" class="btn btn-secondary" onclick="prevQuestion()"
+                        style="visibility: hidden;">
+                        ← Anterior
+                    </button>
+                    <button type="button" id="btn-next" class="btn" onclick="nextQuestion()" disabled>
+                        Siguiente →
+                    </button>
+                </div>
+            </section>
+
+            <!-- Pantalla 3: Resultados -->
+            <section id="screen-results" class="screen">
+                <div class="results-header">
+                    <span class="student-greeting" id="result-student-info">Resultados del Estudiante</span>
+                    <h2 style="font-size: 1.6rem; color: var(--slate-800); margin-top: 4px;">Tu Perfil Vocacional
+                        Sugerido</h2>
+                </div>
+
+                <div class="top-match-card">
+                    <span class="top-match-badge">Programa con Mayor Afinidad</span>
+                    <h3 id="top-program-title" class="top-match-title">Nombre del Programa</h3>
+                    <p id="top-program-desc" class="top-match-desc">Descripción del perfil recomendado.</p>
+                    <div class="percentage-pill">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"
+                            viewBox="0 0 24 24">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span id="top-program-pct">0% de compatibilidad</span>
+                    </div>
+                </div>
+
+                <div class="scores-section">
+                    <h3>Desglose Completo de Afinidad</h3>
+                    <div id="scores-container">
+                        <!-- Barras de afinidad generadas dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="action-footer">
+                    <button type="button" class="btn btn-secondary" onclick="resetQuiz()">
+                        🔄 Repetir Evaluación
+                    </button>
+                    <button type="button" class="btn" onclick="window.print()">
+                        🖨️ Imprimir / Guardar Resultados
+                    </button>
+                    <button type="button" class="btn" onclick="showStudentRegistry()">👥 Ver estudiantes</button>
+                </div>
+            </section>
+
+            <section id="screen-registry" class="screen">
+                <div class="results-header"><span class="student-greeting">Módulo de seguimiento</span>
+                    <h2>Estudiantes registrados</h2>
+                    <p>Registros guardados en este navegador.</p>
+                </div>
+                <div id="registry-summary"></div>
+                <div style="overflow-x:auto">
+                    <table id="students-table" style="width:100%;border-collapse:collapse">
+                        <thead>
+                            <tr>
+                                <th>Estudiante</th>
+                                <th>Grado / Grupo</th>
+                                <th>Programa sugerido</th>
+                                <th>Afinidad</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body"></tbody>
+                    </table>
+                </div>
+                <div class="action-footer"><button class="btn btn-secondary" onclick="backToResults()">←
+                        Volver</button><button class="btn btn-secondary" onclick="exportStudentsCSV()">📥 Exportar
+                        CSV</button><button class="btn" onclick="clearStudentRegistry()">🗑️ Vaciar registro</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+
+</body>
+
+</html>
